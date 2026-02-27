@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pedidos Senac</title>
+  <link rel="stylesheet" href="style.css">
+  
+
+</head>
+<body>
+  
+<h1 class="titulo">
+  Ofertas do <span class="destaque" id="destaque">mês</span>
+</h1>
+
+ 
+<div class="container">
+
+
+
+  <button class="botao" onclick="trocarImage()"> ← </button>
+
+  <div class="retangulo">
+    <div style="text-align: center;">
+      <img id="cookies" src="imagens/cookie.png" width="280">
+    </div>
+  </div>
+
+  <button class="botao" onclick="trocarImage()"> → </button>
+
+</div>
+
+<div id="infoProduto" style="text-align:center; margin-top:20px;">
+    <h3 id="nomeProduto">Cookie</h3>
+    <p id="precoProduto">Preço: R$ 8,00</p>
+
+<button class="btn-pedido">
+  Fazer Pedido
+</button>
+ 
+</div>
+
+<!-- MODAL DE PEDIDO -->
+<div id="menuPedido" class="overlay">
+  <div class="modal">
+
+    <span id="fecharMenu" class="fechar">✖</span>
+
+    <h2>Fazer Pedido</h2>
+
+    <h3>Escolha o produto:</h3>
+
+    <div class="opcao-produto" onclick="selecionarProduto(this, 'hamburguer')">
+        <img src="imagens/ham.png" width="120">
+        <p>Hambúrguer</p>
+    </div>
+
+    <div class="opcao-produto" onclick="selecionarProduto(this, 'cookie')">
+        <img src="imagens/cookie.png" width="120">
+        <p>Cookie</p>
+    </div>
+
+    <!-- FORM AGORA FICA AQUI DENTRO -->
+
+    <form id="formularioPedido">
+
+      <label>Nome:</label>
+      <input type="text" id="nome" required>
+
+      <label>Turma:</label>
+      <select id="turma" required>
+        <option value="">Selecione</option>
+        <option value="terceiroAno">Terceiro Ano</option>
+        <option value="segundoJogos">Segundo Ano Jogos</option>
+        <option value="segundoAdministracao">Segundo Ano Administração</option>
+        <option value="primeiroJogos">Primeiro Ano Jogos</option>
+      </select>
+
+      <label>Quantidade:</label>
+      <input type="number" id="quantidade" min="1" required>
+
+      <input type="hidden" id="produtoSelecionado" required>
+
+      <label>Detalhes:</label>
+      <textarea id="detalhes"></textarea>
+
+      <label>Forma de Pegamento:</label>
+      <select id="formaPegamento" required>
+        <option value="">Selecione</option>
+        <option value="Dinheiro">Dinheiro</option>
+        <option value="pix">Pix</option>
+        <option value="Escravo"> Escambo</option>
+      </select>
+
+      <label>Lugar de Recebimento:</label>
+      <select id="lugarRecebimento" required>
+        <option value="">Selecione</option>
+        <option value=" Entregar na sala">Entregar na Sala</option>
+        <option value=" Retirar na cantina">Retirar na Cantina</option>
+      </select>
+
+
+      <button type="submit">Confirmar Pedido</button>
+
+    </form>
+
+  </div>
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+
+<script>
+(function(){
+   emailjs.init("O-Adg0g54k63qZHhV");
+})();
+</script>
+
+<script src="script.js"></script>
+</body>
+</html>
