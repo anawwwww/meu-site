@@ -2,6 +2,20 @@
   --cor-principal: #ff4d94;
 }
 
+.rodape {
+    text-align: center;
+    padding: 20px;
+    margin-top: 10px;
+    font-size: 14px;
+    opacity: 0.7;
+}
+
+#cookies {
+    border: 4px;
+    border-radius: 15px;
+    
+}
+
 .container {
   display: flex;
   align-items: center;
