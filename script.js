@@ -1,23 +1,32 @@
 const produtos = {
     cookie: {
-        nome: "Cookie",
+        nome: "Cookie Tradicional",
         preco: 8.00,
         cor1: "#ff7eb3",
         cor2: "#ff4d94",
-        corMes: "#ff4d94",   // cor única do mês
-        imagem: "imagens/cookie.png"
+        corMes: "#ff4d94",
+        imagem: "imagens/cookie.jpeg"
     },
-    hamburguer: {
-        nome: "Hambúrguer",
-        preco: 26.00,
+    redvelvet: {
+        nome: "Cookie Red Velvet",
+        preco: 9.00,
         cor1: "#ffe259",
-        cor2: "#ffa500",
-        corMes: "#fcdc3d",   // cor única do mês
-        imagem: "imagens/ham.png"
+        cor2: "#ffe259",
+        corMes: "#ffe259",
+        imagem: "imagens/redvelvet.jpeg"
+    },
+    churros: {
+        nome: "Cookie Churros",
+        preco: 9.00,
+        cor1: "#72eaff",
+        cor2: "#62d9ee",
+        corMes: "#62d9ee",
+        imagem: "imagens/churros.jpeg"
     }
 };
 document.querySelector(".btn-pedido").addEventListener("click", function() {
     menuPedido.style.display = "flex";
+    selecionarProdutoAutomatico(); // 👈 adiciona isso
 });
 
 function atualizarInfoProduto(produto) {
@@ -34,7 +43,9 @@ let imagemAtual = "cookie";
 function trocarImage() {
 
     if (imagemAtual === "cookie") {
-        imagemAtual = "hamburguer";
+        imagemAtual = "redvelvet";
+    } else if (imagemAtual === "redvelvet") {
+        imagemAtual = "churros";
     } else {
         imagemAtual = "cookie";
     }
@@ -55,7 +66,6 @@ function trocarImage() {
         botao.style.backgroundColor = produtoInfo.cor1;
     });
 
-    
     destaque.style.color = produtoInfo.corMes;
 
     botaoPedido.style.background =
@@ -64,19 +74,35 @@ function trocarImage() {
     atualizarInfoProduto(imagemAtual);
 }
 
-
 const retangulo = document.querySelector(".retangulo");
 const menuPedido = document.getElementById("menuPedido");
 const fecharMenu = document.getElementById("fecharMenu");
 
 retangulo.addEventListener("click", () => {
     menuPedido.style.display = "flex";
+
+
+    selecionarProdutoAutomatico();
 });
 
 fecharMenu.addEventListener("click", () => {
     menuPedido.style.display = "none";
 });
 
+
+function selecionarProdutoAutomatico() {
+
+    const opcoes = document.querySelectorAll(".opcao-produto");
+
+    opcoes.forEach(op => op.classList.remove("selecionado"));
+
+    const opcaoSelecionada = document.querySelector(`[data-produto="${imagemAtual}"]`);
+
+    if (opcaoSelecionada) {
+        opcaoSelecionada.classList.add("selecionado");
+        document.getElementById("produtoSelecionado").value = imagemAtual;
+    }
+}
 
 function selecionarProduto(elemento, produto) {
 
@@ -103,7 +129,7 @@ document.getElementById("formularioPedido").addEventListener("submit", function(
         return;
     }
 
-    let produtoNome = produto === "hamburguer" ? "Hambúrguer" : "Cookie";
+    let produtoNome = produtos[produto].nome;
 
     alert(
         "Pedido confirmado!\n\n" +
