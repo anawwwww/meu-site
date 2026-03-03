@@ -23,7 +23,7 @@
 
   <div class="retangulo">
     <div style="text-align: center;">
-      <img id="cookies" src="imagens/cookie.png" width="280">
+      <img id="cookies" src="imagens/cookie.jpeg" width="280">
     </div>
   </div>
 
@@ -32,10 +32,10 @@
 </div>
 
 <div id="infoProduto" style="text-align:center; margin-top:20px;">
-    <h3 id="nomeProduto">Cookie</h3>
+    <h3 id="nomeProduto">Cookie Tradicional</h3>
     <p id="precoProduto">Preço: R$ 8,00</p>
 
-<button class="btn-pedido">
+<button class="btn-pedido" >
   Fazer Pedido
 </button>
  
@@ -51,15 +51,20 @@
 
     <h3>Escolha o produto:</h3>
 
-    <div class="opcao-produto" onclick="selecionarProduto(this, 'hamburguer')">
-        <img src="imagens/ham.png" width="120">
-        <p>Hambúrguer</p>
-    </div>
+    <div class="opcao-produto" data-produto="cookie" onclick="selecionarProduto(this, 'cookie')">
+    <img src="imagens/cookie.jpeg" width="120">
+    <p>Cookie Tradicional</p>
+</div>
 
-    <div class="opcao-produto" onclick="selecionarProduto(this, 'cookie')">
-        <img src="imagens/cookie.png" width="120">
-        <p>Cookie</p>
-    </div>
+<div class="opcao-produto" data-produto="redvelvet" onclick="selecionarProduto(this, 'redvelvet')">
+    <img src="imagens/redvelvet.jpeg" width="120">
+    <p>Cookie Red Velvet</p>
+</div>
+
+<div class="opcao-produto" data-produto="churros" onclick="selecionarProduto(this, 'churros')">
+    <img src="imagens/churros.jpeg" width="120">
+    <p>Cookie Churros</p>
+</div>
 
     <!-- FORM AGORA FICA AQUI DENTRO -->
 
@@ -75,6 +80,7 @@
         <option value="segundoJogos">Segundo Ano Jogos</option>
         <option value="segundoAdministracao">Segundo Ano Administração</option>
         <option value="primeiroJogos">Primeiro Ano Jogos</option>
+        <option value="Jovemaprendiz">Jovem aprendiz</option>
       </select>
 
       <label>Quantidade:</label>
@@ -82,7 +88,7 @@
 
       <input type="hidden" id="produtoSelecionado" required>
 
-      <label>Detalhes:</label>
+      <label>Observações (opcional):</label>
       <textarea id="detalhes"></textarea>
 
       <label>Forma de Pegamento:</label>
@@ -90,7 +96,6 @@
         <option value="">Selecione</option>
         <option value="Dinheiro">Dinheiro</option>
         <option value="pix">Pix</option>
-        <option value="Escravo"> Escambo</option>
       </select>
 
       <label>Lugar de Recebimento:</label>
@@ -116,7 +121,9 @@
    emailjs.init("O-Adg0g54k63qZHhV");
 })();
 </script>
-
+<footer class="rodape">
+    Vendas terceirão
+</footer>
 <script src="script.js"></script>
 </body>
 </html>
