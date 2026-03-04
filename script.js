@@ -1,163 +1,292 @@
+// ==========================
+// PRODUTOS
+// ==========================
+
 const produtos = {
-    cookie: {
-        nome: "Cookie Tradicional",
+    chocolate: {
+        nome: "Cookie Chocolate",
         preco: 8.00,
         cor1: "#ff7eb3",
-        cor2: "#ff4d94",
-        corMes: "#ff4d94",
-        imagem: "imagens/cookie.jpeg"
+        cor2: "#fa79af",
+        corMes: "#fa79af",
+        imagem: "imagens/chocolate.png"
     },
     redvelvet: {
         nome: "Cookie Red Velvet",
-        preco: 9.00,
-        cor1: "#ffe259",
-        cor2: "#ffe259",
-        corMes: "#ffe259",
-        imagem: "imagens/redvelvet.jpeg"
+        preco: 8.00,
+        cor1: "#f79a75",
+        cor2: "#f79a75",
+        corMes: "#f79a75",
+        imagem: "imagens/redvelvet.png"
     },
     churros: {
         nome: "Cookie Churros",
-        preco: 9.00,
-        cor1: "#72eaff",
-        cor2: "#62d9ee",
-        corMes: "#62d9ee",
-        imagem: "imagens/churros.jpeg"
+        preco: 8.00,
+        cor1: "#ecfc63",
+        cor2: "#ecfc63",
+        corMes: "#ecfc63",
+        imagem: "imagens/churros.png"
+    },
+    pacoca: {
+        nome: "Cookie Paçoca",
+        preco: 8.00,
+        cor1: "#d2691e",
+        cor2: "#cd853f",
+        corMes: "#8b5e3c",
+        imagem: "imagens/paçoca.png"
     }
 };
-document.querySelector(".btn-pedido").addEventListener("click", function() {
-    menuPedido.style.display = "flex";
-    selecionarProdutoAutomatico(); // 👈 adiciona isso
-});
 
-function atualizarInfoProduto(produto) {
+// ==========================
+// VARIÁVEIS
+// ==========================
 
-    const produtoInfo = produtos[produto];
-
-    document.getElementById("nomeProduto").innerText = produtoInfo.nome;
-    document.getElementById("precoProduto").innerText = "Preço: R$ " + produtoInfo.preco.toFixed(2);
-    
-}
-
-let imagemAtual = "cookie";
-
-function trocarImage() {
-
-    if (imagemAtual === "cookie") {
-        imagemAtual = "redvelvet";
-    } else if (imagemAtual === "redvelvet") {
-        imagemAtual = "churros";
-    } else {
-        imagemAtual = "cookie";
-    }
-
-    const produtoInfo = produtos[imagemAtual];
-
-    const img = document.getElementById("cookies");
-    const retangulo = document.querySelector(".retangulo");
-    const botoes = document.querySelectorAll(".botao");
-    const botaoPedido = document.querySelector(".btn-pedido");
-    const destaque = document.getElementById("destaque");
-
-    img.src = produtoInfo.imagem;
-
-    retangulo.style.background = produtoInfo.cor1;
-
-    botoes.forEach(botao => {
-        botao.style.backgroundColor = produtoInfo.cor1;
-    });
-
-    destaque.style.color = produtoInfo.corMes;
-
-    botaoPedido.style.background =
-        `linear-gradient(135deg, ${produtoInfo.cor1}, ${produtoInfo.cor2})`;
-
-    atualizarInfoProduto(imagemAtual);
-}
+let imagemAtual = "chocolate";
+let produtosSelecionados = {};
+let ordemProdutos = ["chocolate", "redvelvet", "churros", "pacoca"];
+let indiceAtual = 0;
 
 const retangulo = document.querySelector(".retangulo");
 const menuPedido = document.getElementById("menuPedido");
 const fecharMenu = document.getElementById("fecharMenu");
 
+
+function criarOpcoesModal() {
+
+    const container = document.getElementById("listaProdutos");
+
+    for (let chave in produtos) {
+
+        const produto = produtos[chave];
+
+        const div = document.createElement("div");
+        div.classList.add("opcao-produto");
+        div.setAttribute("data-produto", chave);
+        div.onclick = function() {
+            selecionarProduto(this, chave);
+        };
+
+        div.innerHTML = `
+            <img src="${produto.imagem}" width="150">
+            <span>${produto.nome}</span>
+        `;
+
+        container.appendChild(div);
+    }
+}
+
+// ==========================
+// TROCAR IMAGEM
+// ==========================
+
+function trocarImage() {
+
+    indiceAtual++;
+    if (indiceAtual >= ordemProdutos.length) {
+        indiceAtual = 0;
+    }
+
+    imagemAtual = ordemProdutos[indiceAtual];
+    const produtoInfo = produtos[imagemAtual];
+
+    document.getElementById("cookies").src = produtoInfo.imagem;
+    retangulo.style.background = produtoInfo.cor1;
+
+    document.querySelectorAll(".botao").forEach(botao => {
+        botao.style.backgroundColor = produtoInfo.cor1;
+    });
+
+    document.getElementById("destaque").style.color = produtoInfo.corMes;
+
+    document.querySelector(".btn-pedido").style.background =
+        `linear-gradient(135deg, ${produtoInfo.cor1}, ${produtoInfo.cor2})`;
+
+    atualizarInfoProduto(imagemAtual);
+
+    if (menuPedido.style.display !== "none") {
+    sincronizarProdutoAtualNoModal();
+}
+}
+
+
+
+function sincronizarProdutoAtualNoModal() {
+
+    // limpa seleções visuais
+    document.querySelectorAll(".opcao-produto").forEach(op => {
+        op.classList.remove("selecionado");
+    });
+
+    // limpa quantidades e objeto
+    produtosSelecionados = {};
+    document.getElementById("containerQuantidades").innerHTML = "";
+
+    // seleciona o produto atual
+    const opcao = document.querySelector(`[data-produto="${imagemAtual}"]`);
+
+    if (opcao) {
+        opcao.classList.add("selecionado");
+        produtosSelecionados[imagemAtual] = 1;
+        criarCampoQuantidade(imagemAtual);
+    }
+}
+
+function atualizarInfoProduto(produto) {
+    const produtoInfo = produtos[produto];
+    document.getElementById("nomeProduto").innerText = produtoInfo.nome;
+    document.getElementById("precoProduto").innerText =
+        "Preço: R$ " + produtoInfo.preco.toFixed(2);
+}
+
+// ==========================
+// MENU
+// ==========================
+
+document.querySelector(".btn-pedido").addEventListener("click", () => {
+    menuPedido.style.display = "flex";
+    sincronizarProdutoAtualNoModal(); 
+});
+
 retangulo.addEventListener("click", () => {
     menuPedido.style.display = "flex";
-
-
-    selecionarProdutoAutomatico();
+    sincronizarProdutoAtualNoModal(); 
 });
 
 fecharMenu.addEventListener("click", () => {
     menuPedido.style.display = "none";
 });
 
-
-function selecionarProdutoAutomatico() {
-
-    const opcoes = document.querySelectorAll(".opcao-produto");
-
-    opcoes.forEach(op => op.classList.remove("selecionado"));
-
-    const opcaoSelecionada = document.querySelector(`[data-produto="${imagemAtual}"]`);
-
-    if (opcaoSelecionada) {
-        opcaoSelecionada.classList.add("selecionado");
-        document.getElementById("produtoSelecionado").value = imagemAtual;
-    }
-}
+// ==========================
+// SELEÇÃO
+// ==========================
 
 function selecionarProduto(elemento, produto) {
 
-    const opcoes = document.querySelectorAll(".opcao-produto");
-    opcoes.forEach(op => op.classList.remove("selecionado"));
-    elemento.classList.add("selecionado");
-    document.getElementById("produtoSelecionado").value = produto;
+    elemento.classList.toggle("selecionado");
+
+    if (produtosSelecionados[produto]) {
+        delete produtosSelecionados[produto];
+        removerCampoQuantidade(produto);
+    } else {
+        produtosSelecionados[produto] = 1;
+        criarCampoQuantidade(produto);
+    }
 }
+
+function criarCampoQuantidade(produto) {
+
+    const container = document.getElementById("containerQuantidades");
+
+    const div = document.createElement("div");
+    div.id = "qtd-" + produto;
+
+    div.innerHTML = `
+        <label>${produtos[produto].nome}:</label>
+        <input type="number" min="1" value="1"
+            onchange="atualizarQuantidade('${produto}', this.value)">
+    `;
+
+    container.appendChild(div);
+}
+
+function removerCampoQuantidade(produto) {
+    const campo = document.getElementById("qtd-" + produto);
+    if (campo) campo.remove();
+}
+
+function atualizarQuantidade(produto, valor) {
+    produtosSelecionados[produto] = parseInt(valor);
+}
+
+// ==========================
+// FORMULÁRIO
+// ==========================
 
 document.getElementById("formularioPedido").addEventListener("submit", function(event) {
 
     event.preventDefault();
 
-    const nome = document.getElementById("nome").value;
-    const turma = document.getElementById("turma").value;
-    const quantidade = document.getElementById("quantidade").value;
-    const detalhes = document.getElementById("detalhes").value || "Sem observações";
-    const formaPegamento = document.getElementById("formaPegamento").value;
-    const lugarRecebimento = document.getElementById("lugarRecebimento").value;
-    const produto = document.getElementById("produtoSelecionado").value;
-
-    if (!produto) {
-        alert("Escolha um produto primeiro!");
+    if (Object.keys(produtosSelecionados).length === 0) {
+        alert("Escolha pelo menos um sabor!");
         return;
     }
 
-    let produtoNome = produtos[produto].nome;
+    const nome = document.getElementById("nome").value;
+    const turma = document.getElementById("turma").value;
+    const detalhes = document.getElementById("detalhes").value || "Sem observações";
+    const formaPegamento = document.getElementById("formaPegamento").value;
+    const lugarRecebimento = document.getElementById("lugarRecebimento").value;
 
-    alert(
-        "Pedido confirmado!\n\n" +
-        "Produto: " + produtoNome + "\n" +
-        "Nome: " + nome + "\n" +
-        "Turma: " + turma + "\n" +
-        "Quantidade: " + quantidade + "\n" +
-        "Detalhes: " + detalhes + "\n" +
-        "Lugar de Recebimento: " + lugarRecebimento + "\n" +
-        "Forma de Pegamento: " + formaPegamento
-    );
+    let resumoHTML = "<strong>Sabores:</strong><br>";
+    let total = 0;
+
+    for (let produto in produtosSelecionados) {
+
+        const info = produtos[produto];
+        const quantidade = produtosSelecionados[produto];
+        const subtotal = info.preco * quantidade;
+
+        total += subtotal;
+
+        resumoHTML += `${info.nome} (${quantidade}x) - R$ ${subtotal.toFixed(2)}<br>`;
+    }
+
+    resumoHTML += `<br><strong>Total: R$ ${total.toFixed(2)}</strong>`;
+
+    document.getElementById("resumoConteudo").innerHTML = resumoHTML;
+    document.getElementById("resumoOverlay").style.display = "flex";
+    menuPedido.style.display = "none";
+
+    window.dadosPedido = {
+        nome,
+        turma,
+        detalhes,
+        formaPegamento,
+        lugarRecebimento,
+        total,
+        produtos: produtosSelecionados
+    };
+});
+
+// ==========================
+// CONFIRMAR
+// ==========================
+
+document.getElementById("confirmarResumo").addEventListener("click", function() {
+
+    const dados = window.dadosPedido;
+
+    let nomesProdutos = "";
+    for (let produto in dados.produtos) {
+        nomesProdutos += `${produtos[produto].nome} (${dados.produtos[produto]}x), `;
+    }
 
     emailjs.send("service_5pji1pg", "template_z30pb36", {
-    produto: produtoNome,
-    nome: nome,
-    turma: turma,
-    quantidade: quantidade,
-    detalhes: detalhes,
-    lugar: lugarRecebimento,
-    pagamento: formaPegamento
-})
-.then(function(response) {
-    alert("Pedido enviado com sucesso!");
-    menuPedido.style.display = "none";
-})
-.catch(function(error) {
-    alert("Erro ao enviar pedido.");
+        produto: nomesProdutos,
+        nome: dados.nome,
+        turma: dados.turma,
+        detalhes: dados.detalhes,
+        lugar: dados.lugarRecebimento,
+        pagamento: dados.formaPegamento,
+        total: dados.total.toFixed(2)
+    })
+    .then(() => {
+        alert("Pedido enviado com sucesso!");
+        document.getElementById("resumoOverlay").style.display = "none";
+    })
+    .catch(() => {
+        alert("Erro ao enviar pedido.");
+    });
+
 });
 
-    menuPedido.style.display = "none";
+// ==========================
+// CANCELAR
+// ==========================
+
+document.getElementById("cancelarResumo").addEventListener("click", function() {
+    document.getElementById("resumoOverlay").style.display = "none";
+    menuPedido.style.display = "flex";
 });
+
+criarOpcoesModal();
