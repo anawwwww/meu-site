@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Pedidos Senac</title>
   <link rel="stylesheet" href="style.css">
-  
 
 </head>
 <body>
@@ -23,7 +22,7 @@
 
   <div class="retangulo">
     <div style="text-align: center;">
-      <img id="cookies" src="imagens/cookie.jpeg" width="280">
+      <img id="cookies" src="imagens/chocolate.png" width="280">
     </div>
   </div>
 
@@ -32,7 +31,7 @@
 </div>
 
 <div id="infoProduto" style="text-align:center; margin-top:20px;">
-    <h3 id="nomeProduto">Cookie Tradicional</h3>
+    <h3 id="nomeProduto">Cookie Chocolate</h3>
     <p id="precoProduto">Preço: R$ 8,00</p>
 
 <button class="btn-pedido" >
@@ -50,21 +49,10 @@
     <h2>Fazer Pedido</h2>
 
     <h3>Escolha o produto:</h3>
+    <div id="listaProdutos"></div>
+    
 
-    <div class="opcao-produto" data-produto="cookie" onclick="selecionarProduto(this, 'cookie')">
-    <img src="imagens/cookie.jpeg" width="120">
-    <p>Cookie Tradicional</p>
-</div>
-
-<div class="opcao-produto" data-produto="redvelvet" onclick="selecionarProduto(this, 'redvelvet')">
-    <img src="imagens/redvelvet.jpeg" width="120">
-    <p>Cookie Red Velvet</p>
-</div>
-
-<div class="opcao-produto" data-produto="churros" onclick="selecionarProduto(this, 'churros')">
-    <img src="imagens/churros.jpeg" width="120">
-    <p>Cookie Churros</p>
-</div>
+    
 
     <!-- FORM AGORA FICA AQUI DENTRO -->
 
@@ -83,10 +71,11 @@
         <option value="Jovemaprendiz">Jovem aprendiz</option>
       </select>
 
-      <label>Quantidade:</label>
-      <input type="number" id="quantidade" min="1" required>
+      
 
-      <input type="hidden" id="produtoSelecionado" required>
+      <div id="containerQuantidades"></div>
+
+  
 
       <label>Observações (opcional):</label>
       <textarea id="detalhes"></textarea>
@@ -96,6 +85,7 @@
         <option value="">Selecione</option>
         <option value="Dinheiro">Dinheiro</option>
         <option value="pix">Pix</option>
+        <option value="Cartao">Cartao</option>
       </select>
 
       <label>Lugar de Recebimento:</label>
@@ -105,6 +95,7 @@
         <option value=" Retirar na cantina">Retirar na Cantina</option>
       </select>
 
+      
 
       <button type="submit">Confirmar Pedido</button>
 
@@ -113,6 +104,20 @@
   </div>
 </div>
 
+<div id="resumoOverlay" class="overlay" style="display:none;">
+  <div class="modal">
+
+    <h2>Resumo do Pedido</h2>
+
+    <div id="resumoConteudo"></div>
+
+    <div style="margin-top:20px;">
+      <button type="button" id="cancelarResumo">Cancelar</button>
+      <button type="button" id="confirmarResumo">Confirmar Pedido</button>
+    </div>
+
+  </div>
+</div>
 
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 
