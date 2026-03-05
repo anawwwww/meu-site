@@ -5,7 +5,7 @@
 const produtos = {
     chocolate: {
         nome: "Cookie Chocolate",
-        preco: 8.00,
+        preco: 7.99,
         cor1: "#ff7eb3",
         cor2: "#fa79af",
         corMes: "#fa79af",
@@ -13,7 +13,7 @@ const produtos = {
     },
     redvelvet: {
         nome: "Cookie Red Velvet",
-        preco: 8.00,
+        preco: 7.99,
         cor1: "#f79a75",
         cor2: "#f79a75",
         corMes: "#f79a75",
@@ -21,7 +21,7 @@ const produtos = {
     },
     churros: {
         nome: "Cookie Churros",
-        preco: 8.00,
+        preco: 7.99,
         cor1: "#ecfc63",
         cor2: "#ecfc63",
         corMes: "#ecfc63",
@@ -29,7 +29,7 @@ const produtos = {
     },
     pacoca: {
         nome: "Cookie Paçoca",
-        preco: 8.00,
+        preco: 7.99,
         cor1: "#d2691e",
         cor2: "#cd853f",
         corMes: "#8b5e3c",
@@ -290,3 +290,4 @@ document.getElementById("cancelarResumo").addEventListener("click", function() {
 });
 
 criarOpcoesModal();
+
