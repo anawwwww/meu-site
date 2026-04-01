@@ -45,10 +45,12 @@ let imagemAtual = "cheddar";
 let produtosSelecionados = {};
 let ordemProdutos = ["cheddar", "salada", "combo", "batata"];
 let indiceAtual = 0;
+let adicionaisSelecionados = [];
 
 const retangulo = document.querySelector(".retangulo");
 const menuPedido = document.getElementById("menuPedido");
 const fecharMenu = document.getElementById("fecharMenu");
+
 
 
 function criarOpcoesModal() {
@@ -292,7 +294,7 @@ document.getElementById("formularioPedido").addEventListener("submit", function(
 
     
     let total = 0;
-    let adicionaisSelecionados = [];
+   
 let resumoHTML = "<strong>Sabores:</strong><br>";
 
 // PRODUTOS
@@ -336,10 +338,14 @@ function selecionarAdicional(elemento) {
     const valor = elemento.value;
 
     if (elemento.checked) {
-        adicionaisSelecionados.push(valor);
+
+        if (!adicionaisSelecionados.includes(valor)) {
+            adicionaisSelecionados.push(valor);
+        }
+
     } else {
-        adicionaisSelecionados =
-            adicionaisSelecionados.filter(a => a !== valor);
+
+        adicionaisSelecionados = adicionaisSelecionados.filter(a => a !== valor);
     }
 }
 
@@ -360,9 +366,16 @@ for (let produto in dados.produtos) {
 
 let adicionaisTexto = "";
 
-dados.adicionais.forEach(a => {
-    adicionaisTexto += adicionais[a].nome + ", ";
-});
+if (dados.adicionais.length > 0) {
+
+    dados.adicionais.forEach(a => {
+        adicionaisTexto += adicionais[a].nome + ", ";
+    });
+
+} else {
+
+    adicionaisTexto = "Nenhum adicional";
+}
 
     emailjs.send("service_k13o1jm", "template_ngqxhv8", {
         produto: nomesProdutos,
@@ -394,5 +407,6 @@ document.getElementById("cancelarResumo").addEventListener("click", function() {
 });
 
 criarOpcoesModal();
+
 
 
