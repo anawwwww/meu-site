@@ -22,7 +22,7 @@
 
   <div class="retangulo">
     <div style="text-align: center;">
-      <img id="cookies" src="imagens/chocolate.png" width="280">
+      <img id="cookies" src="imagens/chedar.png" width="280">
     </div>
   </div>
 
@@ -31,8 +31,8 @@
 </div>
 
 <div id="infoProduto" style="text-align:center; margin-top:20px;">
-    <h3 id="nomeProduto">Cookie Chocolate</h3>
-    <p id="precoProduto">Preço: R$ 7,99</p>
+    <h3 id="nomeProduto">Hambúrguer Cheddar</h3>
+    <p id="precoProduto">Preço: R$ 27,00</p>
 
 <button class="btn-pedido" >
   Fazer Pedido
@@ -51,10 +51,6 @@
     <h3>Escolha o produto:</h3>
     <div id="listaProdutos"></div>
     
-
-    
-
-    <!-- FORM AGORA FICA AQUI DENTRO -->
 
     <form id="formularioPedido">
 
@@ -75,10 +71,36 @@
 
       <div id="containerQuantidades"></div>
 
-  
+      <h3>Adicionais:</h3>
+
+      <p id="avisoCombo" style="display:none; color:#ff4d4d; font-weight:bold; margin-top:10px;">
+      ⚠️ O combo já inclui todos os adicionais, não precisando escolher.
+      </p>
+
+      <p id="avisoMultiplos" style="display:none; color:#ff9900; font-weight:bold; margin-top:10px;">
+      ⚠️ Caso escolha mais de um hambúrguer. Escreva nas observações quais adicionais vão em cada um caso escolher adicionais.
+      </p>
+
+      <div class="adicional-item">
+      <input type="checkbox" value="batata" onchange="selecionarAdicional(this)">
+      <span>Batata</span>
+      <span class="preco-adicional">+ R$12</span>
+      </div>
+
+      <div class="adicional-item">
+      <input type="checkbox" value="calabresa" onchange="selecionarAdicional(this)">
+      <span>Calabresa</span>
+      <span class="preco-adicional">+ R$5</span>
+      </div>
+
+      <div class="adicional-item">
+      <input type="checkbox" value="bacon" onchange="selecionarAdicional(this)">
+      <span>Bacon</span>
+      <span class="preco-adicional">+ R$5</span>
+      </div>
 
       <label>Observações (opcional):</label>
-      <textarea id="detalhes"></textarea>
+      <textarea id="detalhes" placeholder="Exemplo: Sem salada."></textarea>
 
       <label>Forma de Pegamento:</label>
       <select id="formaPegamento" required>
@@ -123,7 +145,7 @@
 
 <script>
 (function(){
-   emailjs.init("O-Adg0g54k63qZHhV");
+   emailjs.init("zenmMODZjTS_BtU0n");
 })();
 </script>
 <footer class="rodape">
