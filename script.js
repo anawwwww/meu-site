@@ -308,8 +308,22 @@ for (let produto in produtosSelecionados) {
 
     resumoHTML += `${info.nome} (${quantidade}x)<br>`;
 
+}
 
-   
+// 🔥 ADICIONAIS (FORA DO LOOP DE PRODUTOS)
+
+if (adicionaisSelecionados.length > 0) {
+
+    resumoHTML += "<strong>Adicionais:</strong><br>";
+
+    adicionaisSelecionados.forEach(a => {
+
+        const infoAdicional = adicionais[a];
+
+        total += infoAdicional.preco;
+
+        resumoHTML += `+ ${infoAdicional.nome} (R$ ${infoAdicional.preco})<br>`;
+    });
 
     resumoHTML += "<br>";
 }
