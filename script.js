@@ -114,8 +114,8 @@ function trocarImage() {
 
 const adicionais = {
     batata: { nome: "Batata Frita", preco: 12 },
-    calabresa: { nome: "Calabresa", preco: 5 },
-    bacon: { nome: "Bacon", preco: 5 }
+    calabresa: { nome: "Calabresa", preco: 4 },
+    bacon: { nome: "Bacon", preco: 4 }
 };
 
 
