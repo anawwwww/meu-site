@@ -3,37 +3,37 @@
 // ==========================
 
 const produtos = {
-    chocolate: {
-        nome: "Cookie Chocolate",
-        preco: 7.99,
+    cheddar: {
+        nome: "Hambúrguer Cheddar",
+        preco: 27.00,
         cor1: "#ff7eb3",
         cor2: "#fa79af",
         corMes: "#fa79af",
-        imagem: "imagens/chocolate.png"
+        imagem: "imagens/chedar.png"
     },
-    redvelvet: {
-        nome: "Cookie Red Velvet",
-        preco: 7.99,
-        cor1: "#f79a75",
-        cor2: "#f79a75",
-        corMes: "#f79a75",
-        imagem: "imagens/redvelvet.png"
+    salada: {
+        nome: "Hambúrguer com Salada",
+        preco: 27.00,
+        cor1: "#70ffb0",
+        cor2: "#70ffb0",
+        corMes: "#54e696",
+        imagem: "imagens/ham.png"
     },
-    churros: {
-        nome: "Cookie Churros",
-        preco: 7.99,
-        cor1: "#ecfc63",
-        cor2: "#ecfc63",
+    combo: {
+        nome: "Combo Hambúrguer + Batata + adicionais",
+        preco: 35.00,
+        cor1: "#f2ff7e",
+        cor2: "#f2ff7e",
         corMes: "#ecfc63",
-        imagem: "imagens/churros.png"
+        imagem: "imagens/cc.png"
     },
-    pacoca: {
-        nome: "Cookie Paçoca",
-        preco: 7.99,
-        cor1: "#d2691e",
-        cor2: "#cd853f",
+    batata: {
+        nome: "Batata Frita",
+        preco: 12.00,
+        cor1: "#db7815",
+        cor2: "#db7815",
         corMes: "#8b5e3c",
-        imagem: "imagens/paçoca.png"
+        imagem: "imagens/bt.png"
     }
 };
 
@@ -41,9 +41,9 @@ const produtos = {
 // VARIÁVEIS
 // ==========================
 
-let imagemAtual = "chocolate";
+let imagemAtual = "cheddar";
 let produtosSelecionados = {};
-let ordemProdutos = ["chocolate", "redvelvet", "churros", "pacoca"];
+let ordemProdutos = ["cheddar", "salada", "combo", "batata"];
 let indiceAtual = 0;
 
 const retangulo = document.querySelector(".retangulo");
@@ -110,6 +110,14 @@ function trocarImage() {
 
 
 
+const adicionais = {
+    batata: { nome: "Batata Frita", preco: 12 },
+    calabresa: { nome: "Calabresa", preco: 5 },
+    bacon: { nome: "Bacon", preco: 5 }
+};
+
+
+
 function sincronizarProdutoAtualNoModal() {
 
     // limpa seleções visuais
@@ -129,7 +137,9 @@ function sincronizarProdutoAtualNoModal() {
         produtosSelecionados[imagemAtual] = 1;
         criarCampoQuantidade(imagemAtual);
     }
-}
+    
+};
+
 
 function atualizarInfoProduto(produto) {
     const produtoInfo = produtos[produto];
@@ -164,26 +174,49 @@ function selecionarProduto(elemento, produto) {
 
     elemento.classList.toggle("selecionado");
 
-    if (produtosSelecionados[produto]) {
-        delete produtosSelecionados[produto];
-        removerCampoQuantidade(produto);
+    if (!produtosSelecionados[produto]) {
+
+    produtosSelecionados[produto] = 1;
+    criarCampoQuantidade(produto);
+
+    const aviso = document.getElementById("avisoCombo");
+
+    if (produto === "combo") {
+
+    aviso.style.display = "block";
+
     } else {
-        produtosSelecionados[produto] = 1;
-        criarCampoQuantidade(produto);
+
+    // verifica se ainda existe combo selecionado
+    if (!produtosSelecionados["combo"]) {
+        aviso.style.display = "none";
     }
+
+    atualizarAvisoMultiplos();
 }
+
+}
+    
+}
+
+
 
 function criarCampoQuantidade(produto) {
 
+    if (document.getElementById("qtd-" + produto)) return;
     const container = document.getElementById("containerQuantidades");
 
     const div = document.createElement("div");
     div.id = "qtd-" + produto;
+    div.classList.add("item-produto");
 
     div.innerHTML = `
-        <label>${produtos[produto].nome}:</label>
+        <span>${produtos[produto].nome}</span>
+
         <input type="number" min="1" value="1"
             onchange="atualizarQuantidade('${produto}', this.value)">
+
+        <button type="button" onclick="removerProduto('${produto}')" class="btn-remover">✖</button>
     `;
 
     container.appendChild(div);
@@ -196,6 +229,46 @@ function removerCampoQuantidade(produto) {
 
 function atualizarQuantidade(produto, valor) {
     produtosSelecionados[produto] = parseInt(valor);
+}
+
+function atualizarAvisoMultiplos() {
+
+    const avisoCombo = document.getElementById("avisoCombo");
+    const avisoMultiplos = document.getElementById("avisoMultiplos");
+
+    const temCombo = produtosSelecionados["combo"];
+    const quantidade = Object.keys(produtosSelecionados).length;
+
+    // 🔴 AVISO DO COMBO
+    if (temCombo) {
+        avisoCombo.style.display = "block";
+    } else {
+        avisoCombo.style.display = "none";
+    }
+
+    // 🟡 AVISO DE MÚLTIPLOS
+    if (quantidade > 1) {
+        avisoMultiplos.style.display = "block";
+    } else {
+        avisoMultiplos.style.display = "none";
+    }
+}
+
+function removerProduto(produto) {
+
+    delete produtosSelecionados[produto];
+
+    const campo = document.getElementById("qtd-" + produto);
+    if (campo) campo.remove();
+
+    const opcao = document.querySelector(`[data-produto="${produto}"]`);
+    if (opcao) opcao.classList.remove("selecionado");
+
+    if (produto === "combo") {
+    document.getElementById("avisoCombo").style.display = "none";
+
+    atualizarAvisoMultiplos();
+}
 }
 
 // ==========================
@@ -217,19 +290,27 @@ document.getElementById("formularioPedido").addEventListener("submit", function(
     const formaPegamento = document.getElementById("formaPegamento").value;
     const lugarRecebimento = document.getElementById("lugarRecebimento").value;
 
-    let resumoHTML = "<strong>Sabores:</strong><br>";
+    
     let total = 0;
+    let adicionaisSelecionados = [];
+let resumoHTML = "<strong>Sabores:</strong><br>";
 
-    for (let produto in produtosSelecionados) {
+// PRODUTOS
+for (let produto in produtosSelecionados) {
 
-        const info = produtos[produto];
-        const quantidade = produtosSelecionados[produto];
-        const subtotal = info.preco * quantidade;
+    const info = produtos[produto];
+    const quantidade = produtosSelecionados[produto];
+    const subtotal = info.preco * quantidade;
 
-        total += subtotal;
+    total += subtotal;
 
-        resumoHTML += `${info.nome} (${quantidade}x) - R$ ${subtotal.toFixed(2)}<br>`;
-    }
+    resumoHTML += `${info.nome} (${quantidade}x)<br>`;
+
+
+   
+
+    resumoHTML += "<br>";
+}
 
     resumoHTML += `<br><strong>Total: R$ ${total.toFixed(2)}</strong>`;
 
@@ -238,15 +319,29 @@ document.getElementById("formularioPedido").addEventListener("submit", function(
     menuPedido.style.display = "none";
 
     window.dadosPedido = {
-        nome,
-        turma,
-        detalhes,
-        formaPegamento,
-        lugarRecebimento,
-        total,
-        produtos: produtosSelecionados
-    };
+    nome,
+    turma,
+    detalhes,
+    formaPegamento,
+    lugarRecebimento,
+    total,
+    produtos: produtosSelecionados,
+    adicionais: adicionaisSelecionados
+};
 });
+
+
+function selecionarAdicional(elemento) {
+
+    const valor = elemento.value;
+
+    if (elemento.checked) {
+        adicionaisSelecionados.push(valor);
+    } else {
+        adicionaisSelecionados =
+            adicionaisSelecionados.filter(a => a !== valor);
+    }
+}
 
 // ==========================
 // CONFIRMAR
@@ -257,15 +352,24 @@ document.getElementById("confirmarResumo").addEventListener("click", function() 
     const dados = window.dadosPedido;
 
     let nomesProdutos = "";
-    for (let produto in dados.produtos) {
-        nomesProdutos += `${produtos[produto].nome} (${dados.produtos[produto]}x), `;
-    }
 
-    emailjs.send("service_5pji1pg", "template_z30pb36", {
+for (let produto in dados.produtos) {
+    nomesProdutos += `${produtos[produto].nome} (${dados.produtos[produto]}x), `;
+}
+
+
+let adicionaisTexto = "";
+
+dados.adicionais.forEach(a => {
+    adicionaisTexto += adicionais[a].nome + ", ";
+});
+
+    emailjs.send("service_k13o1jm", "template_ngqxhv8", {
         produto: nomesProdutos,
         nome: dados.nome,
         turma: dados.turma,
         detalhes: dados.detalhes,
+        adicionais: adicionaisTexto,
         lugar: dados.lugarRecebimento,
         pagamento: dados.formaPegamento,
         total: dados.total.toFixed(2)
@@ -290,4 +394,5 @@ document.getElementById("cancelarResumo").addEventListener("click", function() {
 });
 
 criarOpcoesModal();
+
 
